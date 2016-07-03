@@ -20,7 +20,6 @@ module Harmony
     class RpcService
   
       include Sneakers::Worker
-      from_queue ENV['harmony_queue']
   
       def work_with_params(message, delivery_info, metadata)
         params = JSON.parse(message)   
