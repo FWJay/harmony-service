@@ -51,7 +51,7 @@ module Harmony
   
       def create_reply_to_exchange
         ch = reply_to_connection.create_channel
-        ch.default_exchange    
+        ch.exchange(AMQ::Protocol::EMPTY_STRING, :auto_delete => true)    
       end
   
       def send_response(result, reply_to, correlation_id)
