@@ -32,7 +32,7 @@ module Harmony
   
       def stop
         super
-        reply_to_exchange.close
+        #reply_to_exchange.close # not working
         reply_to_connection.close
       end
   
