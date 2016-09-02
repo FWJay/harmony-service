@@ -23,9 +23,10 @@ module Harmony
   
       def work_with_params(message, delivery_info, metadata)
         params = JSON.parse(message)   
+        logger.info "Request: #{params}"
         result = work_with_message_params(params)
-        logger.info result
         json = result.to_json
+        logger.info "Result: #{json}"
         send_response(json, metadata.reply_to, metadata.correlation_id)
         ack!
       end
