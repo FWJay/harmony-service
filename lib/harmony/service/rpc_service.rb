@@ -28,7 +28,7 @@ module Harmony
           result = work_with_message_params(params)
           json = result.to_json
         rescue StandardError => error
-          json = {success: false, message: error.message}.to_json
+          json = {success: false, message: "An error occured", detailed_message: error.message}.to_json
         ensure
           logger.info "Result: #{json}"
           send_response(json, metadata.reply_to, metadata.correlation_id)
