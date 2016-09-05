@@ -1,11 +1,6 @@
 require 'spec_helper'
 
-describe Harmony::Service do
-  it 'has a version number' do
-    expect(Harmony::Service::VERSION).not_to be nil
-  end
-
-  it 'does something useful' do
-    expect(false).to eq(true)
-  end
+describe Harmony::Service do  
+  xit 'sends a success response'
+  xit 'sends a failure response and an ack on error'
 end
