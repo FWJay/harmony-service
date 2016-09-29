@@ -2,6 +2,7 @@ require 'sneakers'
 require 'sneakers/metrics/logging_metrics'
 require 'sneakers/handlers/maxretry'
 require 'json'
+require 'oj'
 
 opts = {
   amqp: ENV['ampq_address'] || 'amqp://localhost:5672',
@@ -23,9 +24,8 @@ module Harmony
   
       def work_with_params(message, delivery_info, metadata)
         begin
-          params = JSON.parse(message)   
-          logger.info "Request: #{params}"
-          result = work_with_message_params(params)
+          request = Oj.load(message)
+          result = work_with_request(request)
           json = result.to_json
           logger.info "Result: #{json}"
           send_response(json, metadata.reply_to, metadata.correlation_id)
