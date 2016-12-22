@@ -18,12 +18,7 @@ describe Harmony::Service::RpcService do
     end
     
     context "with calculation request" do
-      let(:request) do
-        r = Harmony::Service::Message::Request::Calculation.new
-        r.harmony_user_email = "matt@futureworkshops.com"
-        r.inputs = {"lat" => "51.0", "lon" => "0.1"}
-        r
-      end
+      let(:request) { Harmony::Service::Calculator::Request.new(harmony_user_email: "matt@futureworkshops.com", inputs: {"lat" => "51.0", "lon" => "0.1"}) }
       
       before(:each) do
         allow(subject).to receive(:work_with_request) { {"success" => true} }
@@ -34,7 +29,7 @@ describe Harmony::Service::RpcService do
         subject.work_with_params(Oj.dump(request), {}, metadata)
       end
 
-      it { expect(subject).to have_received(:work_with_request).with(kind_of(Harmony::Service::Message::Request::Calculation)) }    
+      it { expect(subject).to have_received(:work_with_request).with(kind_of(Harmony::Service::Calculator::Request)) }    
       it { expect(subject).to have_received(:send_response).with("{\"success\":true}", "harmony.trello", "abc123") }
       it { expect(subject).to have_received(:ack!) }
     end
@@ -49,7 +44,7 @@ describe Harmony::Service::RpcService do
         subject.work_with_params("{\"trello_board_id\": \"12345\"}", {}, metadata)
       end
     
-      it { expect(subject).to have_received(:send_response).with("{\"success\":false,\"message\":\"An error occured\",\"detailed_message\":\"A timeout occured\"}", "harmony.trello", "abc123") }
+      it { expect(subject).to have_received(:send_response).with("{\"^o\":\"Harmony::Service::ErrorResponse\",\"message\":\"An error occured.\",\"detailed_message\":\"A timeout occured\"}", "harmony.trello", "abc123") }
       it { expect(subject).to have_received(:reject!) }
     end
   end

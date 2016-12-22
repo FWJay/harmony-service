@@ -26,8 +26,7 @@ module Harmony
         begin
           request = Oj.load(message)
           result = work_with_request(request)
-          json = result.to_json
-          logger.info "Result: #{json}"
+          json = Oj.dump(result)
           send_response(json, metadata.reply_to, metadata.correlation_id)
           ack!
         rescue StandardError => error
@@ -37,9 +36,8 @@ module Harmony
           error_response = ErrorResponse.new
           error_response.message = "An error occured."
           error_response.detailed_message = error.message
-          json = Oj.dump(error_response)
-          logger.info "Result: #{json}"
-          
+          json = Oj.dump(error_response)    
+            
           send_response(json, metadata.reply_to, metadata.correlation_id)
           reject!
         end
