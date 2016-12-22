@@ -5,14 +5,14 @@ module Harmony
 end
 
 # module defs
-module Harmony::Service::Message 
+module Harmony::Service::Calculator 
   
 end
 
-module Harmony::Service::Message::Calculator 
+module Harmony::Service::Chart 
   
 end
 
-module Harmony::Service::Message::TrelloActionList 
+module Harmony::Service::ActionList 
   
 end

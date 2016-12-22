@@ -1,4 +1,4 @@
-class Harmony::Service::Message::Base
+class Harmony::Service::Message
   def self.attr_accessor(*vars)
     @attributes ||= []
     @attributes.concat vars
@@ -8,16 +8,16 @@ class Harmony::Service::Message::Base
   def self.attributes
     @attributes
   end
+  
+  def initialize(h = {})
+    h.each {|k,v| instance_variable_set("@#{k}",v)}
+  end
 
   def attributes
-    self.class.attributes
+    self.class.attributes || []
   end
 
   def self.json_create(o)
     new(*o['data'])
-  end
-
-  def to_json(*a)
-    { 'json_class' => self.class.name, 'data' => attributes.collect{|a| instance_variable_get("@#{a}")} }.to_json(*a)
   end
 end

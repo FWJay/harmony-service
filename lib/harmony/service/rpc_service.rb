@@ -31,10 +31,12 @@ module Harmony
           send_response(json, metadata.reply_to, metadata.correlation_id)
           ack!
         rescue StandardError => error
-          json = {success: false, message: "An error occured", detailed_message: error.message}.to_json
+          error_response = ErrorResponse.new
+          error_response.message = "An error occured."
+          error_response.detailed_message = error.message
+          json = Oj.dump(error_response)
           logger.error "Result: #{json}"
           send_response(json, metadata.reply_to, metadata.correlation_id)
-          logger.error "Rejecting"
           reject!
         end
       end
