@@ -3,6 +3,7 @@ require 'sneakers/metrics/logging_metrics'
 require 'sneakers/handlers/maxretry'
 require 'json'
 require 'oj'
+require 'rollbar'
 
 opts = {
   amqp: ENV['ampq_address'] || 'amqp://localhost:5672',
@@ -15,6 +16,12 @@ opts = {
 
 Sneakers.configure(opts)
 Sneakers.logger.level = Logger::INFO
+
+Rollbar.configure do |config|
+  config.access_token = ENV['rollbar_access_token']
+  config.environment = ENV['RACK_ENV']
+  config.enabled = ENV['RACK_ENV'] == 'staging' || ENV['RACK_ENV'] == 'production'
+end
 
 module Harmony
   module Service
@@ -32,6 +39,8 @@ module Harmony
         rescue StandardError => error
           logger.error error.message
           logger.error error.backtrace.join("\n")
+          
+          Rollbar.error(error)
           
           error_response = ErrorResponse.new
           error_response.message = "An error occured."

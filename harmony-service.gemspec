@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sneakers", '~> 2.4'
   spec.add_dependency 'bunny', '~> 2.7.0.pre'
   spec.add_dependency "oj", '~> 2.17.4'
+  spec.add_dependency 'rollbar', '~> 2.12'
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
