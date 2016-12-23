@@ -33,7 +33,13 @@ module Harmony
         begin
           logger.debug "Request: #{message}"
           request = Oj.load(message)
+          request_class = request.class
+          response_class = request_response_mapping[request_class]
+          raise "Unacceptable request class: #{request_class}" if response_class.nil? 
+          
           result = work_with_request(request)
+          raise "Unacceptable response class: #{result.class}" unless response_class === result
+          
           json = Oj.dump(result)
           logger.debug "Response: #{json}"
           send_response(json, metadata.reply_to, metadata.correlation_id)
@@ -83,6 +89,13 @@ module Harmony
   
       def send_response(result, reply_to, correlation_id)
         reply_to_exchange.publish(result, :routing_key => reply_to, :correlation_id => correlation_id)
+      end
+      
+      private
+      def request_response_mapping
+        {
+          Calculator::Request => Calculator::Response,
+        }
       end
     end
   end
