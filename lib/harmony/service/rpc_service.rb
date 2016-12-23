@@ -31,9 +31,11 @@ module Harmony
   
       def work_with_params(message, delivery_info, metadata)
         begin
+          logger.debug "Request: #{message}"
           request = Oj.load(message)
           result = work_with_request(request)
           json = Oj.dump(result)
+          logger.debug "Response: #{json}"
           send_response(json, metadata.reply_to, metadata.correlation_id)
           ack!
         rescue StandardError => error
@@ -45,7 +47,8 @@ module Harmony
           error_response = ErrorResponse.new
           error_response.message = "An error occured."
           error_response.detailed_message = error.message
-          json = Oj.dump(error_response)    
+          json = Oj.dump(error_response)
+          logger.debug "Response: #{json}"  
             
           send_response(json, metadata.reply_to, metadata.correlation_id)
           reject!
