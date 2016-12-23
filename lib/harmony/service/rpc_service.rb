@@ -15,7 +15,7 @@ opts = {
 }
 
 Sneakers.configure(opts)
-Sneakers.logger.level = Logger::INFO
+Sneakers.logger.level = ENV['log_level'] == 'debug' ? Logger::DEBUG : Logger::INFO
 
 Rollbar.configure do |config|
   config.access_token = ENV['rollbar_access_token']
