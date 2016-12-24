@@ -95,6 +95,9 @@ module Harmony
       def request_response_mapping
         {
           Calculator::Request => Calculator::Response,
+          ActionList::ListRequest => Array,
+          ActionList::ItemRequest => ActionList::Item,
+          ActionList::ActionRequest => NilClass
         }
       end
     end
