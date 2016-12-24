@@ -97,7 +97,8 @@ module Harmony
           Calculator::Request => Calculator::Response,
           ActionList::ListRequest => Array,
           ActionList::ItemRequest => ActionList::Item,
-          ActionList::ActionRequest => NilClass
+          ActionList::ActionRequest => NilClass,
+          Chart::Request => Chart::Response
         }
       end
     end
