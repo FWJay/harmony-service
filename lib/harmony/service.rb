@@ -16,5 +16,8 @@ require 'harmony/service/action_list/list_request'
 require 'harmony/service/action_list/item_request'
 require 'harmony/service/action_list/item'
 
+require 'harmony/service/form/get_request'
+require 'harmony/service/form/get_response'
+
 require "harmony/service/rpc_service"
 
