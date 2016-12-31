@@ -99,6 +99,7 @@ module Harmony
           ActionList::ItemRequest => ActionList::Item,
           ActionList::ActionRequest => NilClass,
           Chart::Request => Chart::Response,
+          Form::GetRequest => Form::GetResponse,
           Flow::EndedRequest => Response
         }
       end

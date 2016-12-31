@@ -52,25 +52,29 @@ describe Harmony::Service::RpcService do
       end
       
       context "chart" do
-        
         let(:request) { Harmony::Service::Chart::Request.new(harmony_user_email: "matt@futureworkshops.com") }
         let(:response) { Harmony::Service::Chart::Response.new(x_values: ["Jan", "Feb", "Mar"], y_values: [10, 20, 40])}
-      
         it { expect(subject).to have_received(:work_with_request).with(kind_of(Harmony::Service::Chart::Request)) }    
         it { expect(subject).to have_received(:send_response).with("{\"^o\":\"Harmony::Service::Chart::Response\",\"x_values\":[\"Jan\",\"Feb\",\"Mar\"],\"y_values\":[10,20,40]}", "harmony.trello", "abc123") }
         it { expect(subject).to have_received(:ack!) }
-        
+      end
+      
+      context "form" do
+        context 'get' do
+          let(:request) { Harmony::Service::Form::GetRequest.new(harmony_user_email: "matt@futureworkshops.com", inputs: ['satisfaction_level']) }
+          let(:response) { Harmony::Service::Form::GetResponse.new({input_values: [{'satisfaction_level': ['1','2','3']}]})}
+          it { expect(subject).to have_received(:work_with_request).with(kind_of(Harmony::Service::Form::GetRequest)) }    
+          it { expect(subject).to have_received(:send_response).with("{\"^o\":\"Harmony::Service::Form::GetResponse\",\"input_values\":[{\":satisfaction_level\":[\"1\",\"2\",\"3\"]}],\"options\":{}}", "harmony.trello", "abc123") }
+          it { expect(subject).to have_received(:ack!) }
+        end
       end
       
       context "flow ended" do
-        
         let(:request) { Harmony::Service::Flow::EndedRequest.new(harmony_user_email: "matt@futureworkshops.com", pages: [{page_id: 1}]) }
         let(:response) { Harmony::Service::Response.new}
-      
         it { expect(subject).to have_received(:work_with_request).with(kind_of(Harmony::Service::Flow::EndedRequest)) }    
         it { expect(subject).to have_received(:send_response).with("{\"^o\":\"Harmony::Service::Response\"}", "harmony.trello", "abc123") }
         it { expect(subject).to have_received(:ack!) }
-        
       end
       
     end    
