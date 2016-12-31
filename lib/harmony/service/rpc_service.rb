@@ -98,7 +98,8 @@ module Harmony
           ActionList::ListRequest => Array,
           ActionList::ItemRequest => ActionList::Item,
           ActionList::ActionRequest => NilClass,
-          Chart::Request => Chart::Response
+          Chart::Request => Chart::Response,
+          Flow::EndedRequest => Response
         }
       end
     end

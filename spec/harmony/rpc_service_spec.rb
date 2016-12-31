@@ -62,6 +62,17 @@ describe Harmony::Service::RpcService do
         
       end
       
+      context "flow ended" do
+        
+        let(:request) { Harmony::Service::Flow::EndedRequest.new(harmony_user_email: "matt@futureworkshops.com", pages: [{page_id: 1}]) }
+        let(:response) { Harmony::Service::Response.new}
+      
+        it { expect(subject).to have_received(:work_with_request).with(kind_of(Harmony::Service::Flow::EndedRequest)) }    
+        it { expect(subject).to have_received(:send_response).with("{\"^o\":\"Harmony::Service::Response\"}", "harmony.trello", "abc123") }
+        it { expect(subject).to have_received(:ack!) }
+        
+      end
+      
     end    
   
     context "unacceptable request class" do
