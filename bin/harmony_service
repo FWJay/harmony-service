@@ -1,0 +1,5 @@
+require 'sneakers'
+require 'sneakers/cli'
+
+Sneakers.server = true
+Sneakers::CLI.start

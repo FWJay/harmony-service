@@ -26,7 +26,7 @@ end
 module Harmony
   module Service
     class RpcService
-  
+      from_queue ENV['harmony_queue'], timeout_job_after: 10, threads: 1
       include Sneakers::Worker
   
       def work_with_params(message, delivery_info, metadata)
