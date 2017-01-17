@@ -5,29 +5,11 @@ require 'json'
 require 'oj'
 require 'rollbar'
 
-opts = {
-  amqp: ENV['ampq_address'] || 'amqp://localhost:5672',
-  vhost: ENV['ampq_vhost'] || '/',
-  exchange: 'sneakers',
-  exchange_type: :direct,
-  metrics: Sneakers::Metrics::LoggingMetrics.new,
-  handler: Sneakers::Handlers::Maxretry
-}
-
-Sneakers.configure(opts)
-Sneakers.logger.level = ENV['log_level'] == 'debug' ? Logger::DEBUG : Logger::INFO
-
-Rollbar.configure do |config|
-  config.access_token = ENV['rollbar_access_token']
-  config.environment = ENV['RACK_ENV']
-  config.enabled = ENV['RACK_ENV'] == 'staging' || ENV['RACK_ENV'] == 'production'
-end
-
 module Harmony
   module Service
     class RpcService
-      from_queue ENV['harmony_queue'], timeout_job_after: 10, threads: 1
       include Sneakers::Worker
+      from_queue ENV['harmony_queue'], timeout_job_after: 10, threads: 1
   
       def work_with_params(message, delivery_info, metadata)
         begin
@@ -35,9 +17,15 @@ module Harmony
           request = Oj.load(message)
           request_class = request.class
           response_class = request_response_mapping[request_class]
-          raise "Unacceptable request class: #{request_class}" if response_class.nil? 
+          raise "Unacceptable request class: #{request_class}" if response_class.nil?
           
-          result = work_with_request(request)
+          handler_class = Sneakers::CONFIG[:handler_class]
+          raise "No handler specified" if handler_class.nil? 
+          
+          handler = Object.const_get(handler_class).new
+          raise "Unable to create handler: #{handler_class}" if handler.nil? 
+          
+          result = handler.work_with_request(request)
           raise "Unacceptable response class: #{result.class}" unless response_class === result
           
           json = Oj.dump(result)
