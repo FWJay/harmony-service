@@ -11,9 +11,9 @@ Gem::Specification.new do |spec|
   spec.summary       = "Gem which helps you to build Harmony services"
   spec.homepage      = "https://github.com/HarmonyMobile/harmony-service"
   spec.license       = "MIT"
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.files         = `git ls-files`.split($/).reject { |f| f == 'Gemfile.lock' }
+  spec.test_files    = spec.files.grep(/^(test|spec|features)\//)
+  spec.executables   = spec.files.grep(/^bin/).map { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_dependency "sneakers", '~> 2.4'

@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+require 'sneakers'
+require 'sneakers/runner'
+require 'harmony/service'
+
+abort("usage: harmony_service [handler class name] --require [handler class file]") unless ARGV.length == 3
+
+handler_class = ARGV[0]
+puts "Starting Harmony Service with handler: #{handler_class}"
+load File.expand_path(ARGV[2])
+
+opts = {
+  amqp: ENV['ampq_address'] || 'amqp://localhost:5672',
+  vhost: ENV['ampq_vhost'] || '/',
+  exchange: 'sneakers',
+  exchange_type: :direct,
+  metrics: Sneakers::Metrics::LoggingMetrics.new,
+  handler: Sneakers::Handlers::Maxretry,
+  handler_class: handler_class
+}
+
+Sneakers.server = true
+Sneakers.configure(opts)
+Sneakers.logger.level = ENV['log_level'] == 'debug' ? Logger::DEBUG : Logger::INFO
+
+Rollbar.configure do |config|
+  config.access_token = ENV['rollbar_access_token']
+  config.environment = ENV['RACK_ENV']
+  config.enabled = ENV['RACK_ENV'] == 'staging' || ENV['RACK_ENV'] == 'production'
+end
+
+r = Sneakers::Runner.new([Harmony::Service::RpcService])
+pid = Sneakers::CONFIG[:pid_path]
+puts "Started pid: #{pid}"
+r.run
