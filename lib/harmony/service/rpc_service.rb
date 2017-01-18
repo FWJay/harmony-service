@@ -91,7 +91,9 @@ module Harmony
         raise "No handler specified" if handler_class.nil? 
         
         handler = Object.const_get(handler_class).new
-        raise "Unable to create handler: #{handler_class}" if handler.nil? 
+        raise "Unable to create handler: #{handler_class}" if handler.nil?
+        
+        handler
       end
     end
   end
