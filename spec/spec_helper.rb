@@ -8,17 +8,8 @@ opts = {
   exchange: 'sneakers',
   exchange_type: :direct,
   metrics: Sneakers::Metrics::LoggingMetrics.new,
-  handler: Sneakers::Handlers::Maxretry,
-  handler_class: "MockHandler"
+  handler: Sneakers::Handlers::Maxretry
 }
 
 Sneakers.configure(opts)
 Sneakers.logger.level = Logger::DEBUG
-
-class MockHandler
-  
-  def work_with_request(request)
-    
-  end
-  
-end

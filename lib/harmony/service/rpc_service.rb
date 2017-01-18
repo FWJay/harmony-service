@@ -19,13 +19,7 @@ module Harmony
           response_class = request_response_mapping[request_class]
           raise "Unacceptable request class: #{request_class}" if response_class.nil?
           
-          handler_class = Sneakers::CONFIG[:handler_class]
-          raise "No handler specified" if handler_class.nil? 
-          
-          handler = Object.const_get(handler_class).new
-          raise "Unable to create handler: #{handler_class}" if handler.nil? 
-          
-          result = handler.work_with_request(request)
+          result = new_handler.work_with_request(request)
           raise "Unacceptable response class: #{result.class}" unless response_class === result
           
           json = Oj.dump(result)
@@ -90,6 +84,14 @@ module Harmony
           Form::GetRequest => Form::GetResponse,
           Flow::EndedRequest => Response
         }
+      end
+      
+      def new_handler
+        handler_class = Sneakers::CONFIG[:handler_class]
+        raise "No handler specified" if handler_class.nil? 
+        
+        handler = Object.const_get(handler_class).new
+        raise "Unable to create handler: #{handler_class}" if handler.nil? 
       end
     end
   end
