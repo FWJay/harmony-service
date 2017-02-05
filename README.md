@@ -5,12 +5,12 @@ The Harmony Service gem simplifies creation of a Service in the Harmony Platform
 ## Installation
 
 1. Create a new Service via the Harmony platform
-1. Download the code for your Service.
-1. Run `bundle install`
+1. Download the [Harmony Service Template](https://github.com/HarmonyMobile/harmony-service-template).
+1. Add your own code. You will need to use your own source code control.
 
 ## Usage
 
-In order to test your code locally you can run `bundle exec rspec`. Once you have completed development you can upload into the Harmony Platform.
+In order to test your code locally you can run `bundle exec rspec`. Once you have completed development you can upload into  Harmony Platform.
 
 ## Development
 
