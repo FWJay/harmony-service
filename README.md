@@ -1,6 +1,10 @@
 # Harmony::Service
 
-The Harmony Service gem simplifies creation of a Service in the Harmony Platform.
+The Harmony Service gem simplifies creation of a micro-service (Service) in the Harmony Platform.
+
+You can connect your Service to pages and Apps inside Harmony. Whenever a page or App connected to your service is triggered it will route a message through to your service with a representative class. You should respond with the appropriate class encapsulating any data you want to display. For example, if your Service recieves a ``Harmony::Service::Chart::Request``, it should return a ``Harmony::Service::Chart::Response``.
+
+You can find the relevant mappings [here](https://github.com/HarmonyMobile/harmony-service/blob/master/lib/harmony/service/rpc_service.rb#L95). 
 
 ## Installation
 
@@ -11,10 +15,6 @@ The Harmony Service gem simplifies creation of a Service in the Harmony Platform
 ## Usage
 
 In order to test your code locally you can run `bundle exec rspec`. Once you have completed development you can upload into  Harmony Platform.
-
-## Development
-
-Your Service should respond to request messages appropriately. You can find the relevant mappings [here](https://github.com/HarmonyMobile/harmony-service/blob/master/lib/harmony/service/rpc_service.rb#L95).  
 
 ## License
 
